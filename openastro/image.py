@@ -2,26 +2,21 @@
 import os
 import cv2
 from astropy.io import fits
-
-class WrongFilePath(BaseException):
-    def __init__(self, wrong_file_path=""):
-        self.wrong_file_path = wrong_file_path
-
-    def __str__(self):
-        return "File {} does not exist.".format(self.wrong_file_path)
+from .exceptions import WrongFilePath
 
 
-class Image():
+class Image:
     def __init__(self, directory="", image_name=None):
-        image_path = os.path.join(directory, image_name)
-        if os.path.exists(image_path):
-            self.fit = fits.open(image_path)
-            self.image_data = self.fit[0].data
-        else:
-            raise WrongFilePath(image_path)
+        self.image_path = os.path.join(directory, image_name)
+        self.image_data = self.init_image_data()
 
-    def reset_image_data(self):
-        self.image_data = self.fit[0].data
+    def init_image_data(self):
+        if os.path.exists(self.image_path):
+            with fits.open(self.image_path) as fit:
+                self.image_data = fit[0].data
+            return self.image_data
+        else:
+            raise WrongFilePath(self.image_path)
 
     def bayer_to_rgb(self, bayer_pattern=None):
         """

@@ -41,7 +41,7 @@ AUTHOR_EMAIL = "emptyset110@gmail.com"
 
 URL = "http://www.xtelescope.net"
 
-VERSION = "0.1"
+VERSION = "0.2"
 
 LICENSE = "Apache Software License"
 
